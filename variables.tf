@@ -1,11 +1,18 @@
 variable "azure_subscription_id" {}
-variable "azure_client_id" {}
-variable "azure_client_secret" {}
 variable "azure_tenant_id" {}
 
 variable "ssh_allowed_ips" {
   #type = list(string)
 }
+
+variable "corp" {}
+variable "component" {}
+variable "staging" {}
+variable "resource_location" {}
+
+variable "mgmt_vnet_resource_group" {}
+variable "mgmt_vnet_name" {}
+variable "mgmt_subnet_name" {}
 
 variable "opencti_resource_group_name" {}
 variable "opencti_data_size_gb" {}
@@ -36,25 +43,19 @@ variable "appgw_resource_group_name" {}
 variable "appgw_sku_name" {}
 variable "appgw_sku_tier" {}
 
-variable "corp" {}
-variable "component" {}
-variable "staging" {}
-variable "resource_location" {}
-
-variable "vnet_resource_group_name" {}
-variable "virtual_network_address_space" {}
-variable "subnet_address_prefixes" {}
 variable "opencti_private_ip" {}
 variable "elastic_private_ip_range" {}
 variable "kibana_private_ip" {}
 variable "logstash_private_ip" {}
-variable "appgw_fqdn" {}
 variable "appgw_virtual_network_address_space" {}
 variable "frontend_subnet_address_prefixes" {}
 variable "backend_subnet_address_prefixes" {}
 variable "backend_server_fqdn" {}
 variable "backend_server_port1" {}
 variable "tags" {}
+variable "waf_config" {}
+
+variable "opencti_admin_private_key_path" {}
 
 variable "vm_opencti_admin_username" {
     default = "ansible"

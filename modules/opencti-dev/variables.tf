@@ -6,6 +6,10 @@ variable "component" {}
 variable "staging" {}
 variable "resource_location" {}
 
+variable "mgmt_vnet_resource_group" {}
+variable "mgmt_vnet_name" {}
+variable "mgmt_subnet_name" {}
+
 variable "opencti_resource_group_name" {}
 variable "opencti_data_size_gb" {}
 variable "opencti_vm_size" {}
@@ -31,14 +35,13 @@ variable "logstash_vm_size" {}
 variable "logstash_vm_os_disk_storage_account_type" {}
 variable "logstash_vm_data_disk_storage_account_type" {}
 
-variable "vnet_resource_group_name" {}
-variable "virtual_network_address_space" {}
-variable "subnet_address_prefixes" {}
+variable "backend_server_fqdn" {}
 variable "opencti_private_ip" {}
 variable "elastic_private_ip_range" {}
 variable "kibana_private_ip" {}
 variable "logstash_private_ip" {}
-variable "appgw_fqdn" {}
+
+variable "opencti_admin_private_key_path" {}
 
 variable "vm_opencti_admin_username" {}
 variable "vm_opencti_admin_ssh_key" {}

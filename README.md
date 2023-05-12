@@ -1,6 +1,58 @@
 # opencti-terraform
 
+### Terraform
 
+TERRAFORM
+1. # Initizate backend configuration
+terraform init -backend-config=env/test/backend-config.tfvars
+
+2. # Plan terraform deployment
+terraform plan -var-file=env/test/test.tfvars
+
+3. # Apply terraform deployment
+terraform apply -var-file=env/test/test.tfvars
+
+# Remove resource groups from state
+terraform state rm module.opencti.azurerm_resource_group.rg_opencti
+terraform state rm module.opencti.azurerm_resource_group.rg_elastic
+terraform state rm module.opencti.azurerm_resource_group.rg_appgw
+
+# Remove OpenCTI, Elasticsearch and Application Gateway Resource Groups from State
+terraform state rm module.opencti.azurerm_resource_group.rg_opencti module.opencti.azurerm_resource_group.rg_elastic module.appgw.azurerm_resource_group.rg_appgw
+
+# Destroy resources in Azure
+terraform destroy
+
+# Troubleshooting
+export TF_LOG=DEBUG
+
+# Import existing Resource Group (OpenCTI)
+terraform import module.opencti.azurerm_resource_group.rg_opencti /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-dev-01
+
+# Import existing Resource Group (Elasticsearch)
+terraform import module.opencti.azurerm_resource_group.rg_elastic /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-dev-02
+
+# Import existing Resource Group (Appgw)
+terraform import module.appgw.azurerm_resource_group.rg_appgw /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-appgw-dev
+s
+# Import existing Resource Group (Appgw Keyvault)
+terraform import module.appgw.azurerm_key_vault_secret.keyvault /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-appgw-dev/providers/Microsoft.KeyVault/vaults/appgw-opencti-keyvault
+
+# Import existing Resource Group (Appgw Public IP)
+terraform import module.appgw.azurerm_public_ip.appgw /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-appgw-dev/providers/Microsoft.Network/publicIPAddresses/rty-opencti-appgw-public-ip-dev
+
+# Import existing Resource Group (Appgw Virtual Network)
+terraform import module.appgw.azurerm_virtual_network.appgw /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-appgw-dev/providers/Microsoft.Network/virtualNetworks/rty-opencti-appgw-vnet-dev
+
+# Import existing Resource Group (import Backend Subnet)
+terraform import module.appgw.azurerm_subnet.backend /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-appgw-dev/providers/Microsoft.Network/virtualNetworks/rty-opencti-appgw-vnet-dev/subnets/rty-opencti-appgw-backend-snet-dev
+
+# Import existing Resource Group (import Frontend Subnet)
+terraform import module.appgw.azurerm_subnet.frontend /subscriptions/c75c68e3-1700-4130-8429-30b3c2c89933/resourceGroups/rty-mathias-rg-appgw-dev/providers/Microsoft.Network/virtualNetworks/rty-opencti-appgw-vnet-dev/subnets/rty-opencti-appgw-frontend-snet-dev
+
+## <> Remvove All Resources from State <>
+# 1. Create a *.txt file and add all the modules
+cat resources.txt | xargs -n 1 terraform state rm
 
 ## Getting started
 

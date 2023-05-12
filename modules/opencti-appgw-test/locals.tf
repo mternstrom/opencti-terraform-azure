@@ -1,25 +1,26 @@
 locals {
-  corp          = var.corp
-  component     = var.component
-  staging       = var.staging
-  rg_name       = var.appgw_resource_group_name
-  sku_name      = var.appgw_sku_name #Sku with WAF is : WAF_v2 or "Standard_Small"
-  sku_tier      = var.appgw_sku_tier
-  capacity      = 1
+  corp                = var.corp
+  component           = var.component
+  staging             = var.staging
+  rg_name             = var.appgw_resource_group_name
+  sku_name            = var.appgw_sku_name
+  sku_tier            = var.appgw_sku_tier
+  capacity            = 1
 
   appname  = "${var.component}"
   backend_address_pool = {
     name   = "${local.appname}-pool1"
   }
 
+  appgw_name                     = "${var.corp}-${var.component}-appgw-${var.staging}"
   appgw_vnet_name                = "${var.corp}-${var.component}-appgw-vnet-${var.staging}"
   subnet_frontend_name           = "${var.corp}-${var.component}-appgw-frontend-snet-${var.staging}"
   backend_frontend_name          = "${var.corp}-${var.component}-appgw-backend-snet-${var.staging}"
   appgw_public_ip_name           = "${var.corp}-${var.component}-appgw-public-ip-${var.staging}"
-  appgw_name                     = "${var.corp}-${var.component}-appgw-${var.staging}"
 
-  frontend_port_name             = "${local.appname}-feport"
-  frontend_ip_configuration_name = "${local.appname}-feip"
+  frontend_port_name             = "${local.appname}-frontport"
+  frontend_ip_configuration_name = "${local.appname}-frontpublic"
+  gateway_ip_configuration_name  = "${local.appname}-frontend1-ip-configuration"
   http_setting_name              = "${local.appname}-portal"
   http_setting_name2             = "${local.appname}-validation"
   listener_name1                 = "${local.appname}-portal"
