@@ -1,0 +1,21 @@
+stages:
+  - deploy
+
+variables:
+  GIT_DEPTH: "20"
+
+deploy_to_github:
+  stage: deploy
+  image: ruby:3.1
+  script:
+    - echo "Listing all branches:"
+    - git branch -a
+    - echo "Fetching the latest changes"
+    - git fetch origin
+    - git checkout $CI_COMMIT_REF_NAME
+    - echo "Setting remote URL for GitHub"
+    - git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/mternstrom/opencti-terraform.git
+    - echo "Pushing to GitHub"
+    - git push github $CI_COMMIT_REF_NAME:$CI_COMMIT_REF_NAME
+  only:
+    - branches
