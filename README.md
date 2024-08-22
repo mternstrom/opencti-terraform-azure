@@ -46,8 +46,6 @@ Make sure you have the following before beginning:
 
 - An **Azure Subscription** with appropriate permissions (e.g., Contributor)
 
-- **OpenCTI Docker Configuration** ready for containerized deployment of OpenCTI on Azure
-
 ---
 
 ## 🗂️ 3. Folder Structure <a name="folder-structure"></a>
