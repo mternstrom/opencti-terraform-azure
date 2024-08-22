@@ -144,7 +144,7 @@ This command targets only the `opencti-appgw-dev` module, ensuring that only the
 
 ---
 
-## 🔧 5. Comprehensive Terraform Commands <a name="comprehensive-terraform-commands"></a>
+## 🔧 5. Terraform Commands <a name="comprehensive-terraform-commands"></a>
 
 Here is a full list of useful Terraform commands you can run from the **root directory** for managing your infrastructure:
 
@@ -220,16 +220,75 @@ Here is a full list of useful Terraform commands you can run from the **root dir
 
 ## 🛠️ 8. Troubleshooting <a name="troubleshooting"></a>
 
-- **Authentication Errors**  
-  If you encounter authentication issues, ensure that your Azure credentials are correctly configured and that the service principal has appropriate permissions in the Azure subscription.
+While deploying OpenCTI on Azure using Terraform, you may encounter various issues. Below are some common problems, potential causes, and how to approach each.
 
-- **State Locking**  
-  If Terraform reports a state lock, verify if another process is applying changes. Remove stale state locks from your Azure Blob Storage if necessary.
+### 🔐 **1. Authentication Issues**
 
-- **
+Terraform may fail to authenticate with Azure services due to several reasons. These issues are often related to expired credentials or misconfigured authentication details.
 
-Resource Limits**  
-  Review Azure subscription quotas and ensure your deployments stay within the available resource limits. Adjust limits as needed via the Azure portal.
+- **Error Examples**: `Error building account`, `Invalid client credentials`, `Authentication failed`
+- **Potential Causes**:
+  - Expired Azure CLI session or invalid login.
+  - Incorrectly set or expired Service Principal credentials.
+  - Misconfigured environment variables (`ARM_CLIENT_ID`, `ARM_CLIENT_SECRET`, `ARM_TENANT_ID`).
+
+⚠️ **Note**: Always validate your Terraform configuration and ensure that you’ve correctly set your authentication details before proceeding.
+
+---
+
+### 🔒 **2. Terraform State Locking**
+
+Terraform's state locking mechanism prevents multiple processes from modifying the state at the same time. Issues can arise if a previous operation was interrupted or if concurrent operations are initiated.
+
+- **Error Examples**: `Error locking state`, `State is locked by another process`, `Failed to acquire state lock`
+- **Potential Causes**:
+  - A previous Terraform process was interrupted, leaving a stale lock.
+  - Simultaneous Terraform runs are attempting to modify the same state file.
+  - Network connectivity issues with remote backend storage (e.g., Azure Blob Storage).
+
+💡 **Tip**: Ensure that only one Terraform process is running at any given time. If necessary, validate your state configuration and use the `terraform force-unlock` command to remove stale locks.
+
+---
+
+### 💡 **3. Resource Quota Limits**
+
+Running into quota limits is a frequent issue when deploying cloud resources, especially in heavily utilized regions. Azure imposes limits on resources like virtual machines, storage, and IP addresses.
+
+- **Error Examples**: `Quota exceeded for resource type`, `Not enough available resources in the region`
+- **Potential Causes**:
+  - The requested VM or resource type exceeds the allowed quota in the target region.
+  - Incorrect resource sizing or an attempt to create too many instances at once.
+  - Insufficient resources available in the selected Azure region due to high demand.
+
+💬 **Detailed Considerations**: 
+  - Before deploying, it’s essential to verify your region’s quota limits using the Azure portal. If needed, you can request quota increases from Azure Support. Additionally, ensure that you’re selecting the appropriate VM sizes and regions where resources are available.
+
+📋 **Pro Tip**: Always check the limits in the Azure portal, especially when deploying to commonly used regions. Make sure your `terraform.tfvars` reflects realistic resource allocations.
+
+---
+
+### 💾 **4. Remote State Storage Issues**
+
+If you're using remote state storage (e.g., Azure Blob Storage), Terraform may encounter problems accessing or writing to the backend due to connectivity issues or incorrect configuration.
+
+- **Error Examples**: `Error retrieving the state from the backend`, `Failed to save state`, `Backend configuration error`
+- **Potential Causes**:
+  - Incorrect backend configuration in `backend-config.tfvars` (e.g., wrong storage account name or container).
+  - Network issues between your local machine and the Azure Blob Storage account.
+  - Insufficient permissions to read/write the state in the Azure Blob Storage container.
+
+💻 **Important**: Double-check your backend configuration files and validate that the Service Principal or credentials used by Terraform have appropriate permissions (`Storage Blob Data Contributor`).
+
+---
+
+### ✅ **5. Validate Your Code**
+
+Terraform's ability to validate the correctness of your infrastructure code is crucial for preventing runtime errors. Before running `terraform apply`, always validate your code.
+
+- **Command**:  
+  Run `terraform validate` to check for syntax and logical errors in your configuration files. This step ensures that your code is error-free before proceeding with deployment.
+
+💡 **Reminder**: Always use `terraform fmt` to format your code consistently and `terraform validate` to catch issues early in your configuration.
 
 ---
 
